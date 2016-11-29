@@ -19,8 +19,6 @@ body {
     -ms-touch-action: none;
     /* prevent selection highlight */
     -webkit-tap-highlight-color: rgba(0,0,0,0);
-
-    -webkit-app-region: drag;
 }
         
 .header, .footer{
@@ -117,22 +115,16 @@ body {
 }
     </style>
 
-	<script type="text/javascript">
+<script type="text/javascript">
 window.$ = window.jQuery = require('jquery/dist/jquery.js');
-$(document).contextmenu(function(event) {
-	event.preventDefault();
-
-	var target = $(event);
-
-	console.log(target, event.altKey, event.shiftKey, event.ctrlKey);
-
-});
 
 const {remote} = require('electron');
 const {Menu, MenuItem} = remote;
 
 window.addEventListener('contextmenu', (e) => {
 	e.preventDefault();
+
+	console.log(remote.getCurrentWindow());
 
 	const menu = new Menu();
 	menu.popup(remote.getCurrentWindow());
@@ -183,12 +175,20 @@ function selectColor(el){
 // prototype to	start drawing on touch using canvas moveTo and lineTo
 var drawTouch = function() {
 	var start = function(e) {
+		if(e.button===2) {
+			e.preventDefault();
+			return;
+		}
 		ctx.beginPath();
 		x = e.changedTouches[0].pageX;
 		y = e.changedTouches[0].pageY-44;
 		ctx.moveTo(x,y);
 	};
 	var move = function(e) {
+		if(e.type==="contextmenu") {
+			e.preventDefault();
+			return;
+		}
 		e.preventDefault();
 		x = e.changedTouches[0].pageX;
 		y = e.changedTouches[0].pageY-44;
@@ -202,6 +202,11 @@ var drawTouch = function() {
 // prototype to	start drawing on pointer(microsoft ie) using canvas moveTo and lineTo
 var drawPointer = function() {
 	var start = function(e) {
+		if(e.button===2) {
+			e.preventDefault();
+			return;
+		}
+
         e = e.originalEvent;
 		ctx.beginPath();
 		x = e.pageX;
@@ -209,6 +214,10 @@ var drawPointer = function() {
 		ctx.moveTo(x,y);
 	};
 	var move = function(e) {
+		if(e.type==="contextmenu") {
+			e.preventDefault();
+			return;
+		}
 		e.preventDefault();
         e = e.originalEvent;
 		x = e.pageX;
@@ -224,6 +233,10 @@ var drawPointer = function() {
 var drawMouse = function() {
 	var clicked = 0;
 	var start = function(e) {
+		if(e.button===2) {
+			e.preventDefault();
+			return;
+		}
 		clicked = 1;
 		ctx.beginPath();
 		x = e.pageX;
@@ -231,6 +244,10 @@ var drawMouse = function() {
 		ctx.moveTo(x,y);
 	};
 	var move = function(e) {
+		if(e.button===2) {
+			e.preventDefault();
+			return;
+		}
 		if(clicked){
 			x = e.pageX;
 			y = e.pageY-44;
@@ -246,7 +263,7 @@ var drawMouse = function() {
 	document.addEventListener("mouseup", stop, false);
 };
 
-	</script>
+</script>
 </head>
 <body>
 <div id="page">

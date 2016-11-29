@@ -6,6 +6,7 @@
   "homepage": "https://github.com/egg123/",
   "main": "app/javascripts/main/main.js",
   "dependencies": {
+    "canvas": "^1.6.2",
     "jquery": "^3.1.1"
   }
 }

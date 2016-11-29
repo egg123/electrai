@@ -14,6 +14,8 @@ var menu = Menu.buildFromTemplate([
       {label: 'Save'},
       {label: 'Save As...', click: onSaveAs},
       {type: 'separator'},
+      {label: 'Export As MNIST', click: onMnist},
+      {type: 'separator'},
       {label: 'Exit', click: onExit}
     ]
   },
@@ -62,7 +64,7 @@ function createWindow() {
     });
 
     mainWindow.loadURL(`file://${__dirname}/../../html/index_javascript.html`);
-//    mainWindow.webContents.openDevTools();
+    mainWindow.webContents.openDevTools();
 	mainWindow.setAutoHideMenuBar(false);
 
     mainWindow.on('closed', function () {
@@ -96,7 +98,7 @@ function onSaveAs() {
 		(function(filename){
 			console.log('Save As...');
 
-			var dataUrl = document.getElementById('canvas').toDataURL('image/png');
+			var dataUrl = document.getElementById('canvas').toDataURL('data:image/png');
 			var a = document.createElement("a");
 
 			a.style = "display: none";
@@ -116,52 +118,11 @@ function onSaveAs() {
 
 		}).toString2()
 	);
-
-	/*
-	dialog.showSaveDialog(mainWindow, options, (filename) => {
-		if( filename ) {
-//			var data = "hoge";
-//			writeFile(filename, data);
-			Function.prototype.toString2 = function() {
-				return "(" + this.toString() + ")();";
-			};
-			mainWindow.webContents.executeJavaScript(
-				(function(filename){
-					console.log("hogehoge");
-
-//					CanvasElement canvas = document.query('#canvas');
-//					String dataUrl = canvas.toDataUrl();
-
-//
-					var dataUrl = document.getElementById('canvas').toDataURL('image/png');
-					console.log(dataUrl);
-
-
-					var a = document.createElement("a");
-
-					a.style = "display: none";
-					a.href = dataUrl;
-					a.target = '_blank';
-					a.download = filename;
-
-					document.body.appendChild(a);
-					a.click();
-
-					setTimeout( () => {
-						document.body.remoteChild(a);
-						window.URL.revokeObjectURL(dataUrl);
-					}, 100);
-
-
-				}).toString2()
-			);
-		}
-	});*/
-
-
 }
 
 function onNewFile() {
+	console.log('New File');
+
 	Function.prototype.toString2 = function() {
 		return "(" + this.toString() + ")();";
 	};
@@ -171,6 +132,25 @@ function onNewFile() {
 			console.log('New File');
 			//
 			newCanvas();
+
+		}).toString2()
+	);
+}
+
+function onMnist() {
+	console.log('Export As MNIST');
+
+	Function.prototype.toString2 = function() {
+		return "(" + this.toString() + ")();";
+	};
+
+	mainWindow.webContents.executeJavaScript(
+		(function(){
+			console.log('New File');
+			//
+			var dataUrl = document.getElementById('canvas').toDataURL('data:image/png');
+
+
 
 		}).toString2()
 	);
